@@ -290,6 +290,25 @@ const spec = {
     enable: true
   },
   pie: {
+    showEmptyCircle: true,
+    emptyCircleStyle: {
+      fill: '#698514',
+      cursor: 'pointer',
+      dx: 100,
+      // dy: -200,
+      // scaleX: 2,
+      // scaleY: 0.5,
+      outerBorder: {
+        distance: 20,
+        lineWidth: 1,
+        stroke: 'green'
+      },
+      innerBorder: {
+        distance: 2,
+        lineWidth: 1,
+        stroke: 'black'
+      }
+    },
     state: {
       hover: {
         cursor: 'pointer',
@@ -580,6 +599,25 @@ setTimeout(() => {
       enable: true
     },
     pie: {
+      showEmptyCircle: true,
+      emptyCircleStyle: {
+        fill: '#698514',
+        cursor: 'pointer',
+        dx: 100,
+        // dy: -200,
+        // scaleX: 2,
+        // scaleY: 0.5,
+        outerBorder: {
+          distance: 20,
+          lineWidth: 1,
+          stroke: 'green'
+        },
+        innerBorder: {
+          distance: 2,
+          lineWidth: 1,
+          stroke: 'black'
+        }
+      },
       state: {
         hover: {
           cursor: 'pointer',

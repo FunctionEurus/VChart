@@ -1,6 +1,6 @@
 /* eslint-disable no-duplicate-imports */
 import { degreeToRadian, isValid } from '@visactor/vutils';
-import { DataView } from '@visactor/vdataset';
+import { DataView, DataSet } from '@visactor/vdataset';
 import {
   AttributeLevel,
   ARC_START_ANGLE,
@@ -81,6 +81,10 @@ export class BasePieSeries<T extends IBasePieSeriesSpec> extends PolarSeries<T> 
   protected _labelMark: ITextMark | null = null;
   protected _labelLineMark: IPathMark | null = null;
 
+  protected _showEmptyCircle: boolean;
+  protected _emptyDataView: DataView | null = null;
+  protected _emptyArcMark: IArcMark | null = null;
+
   protected _buildMarkAttributeContext() {
     super._buildMarkAttributeContext();
     // center
@@ -116,6 +120,8 @@ export class BasePieSeries<T extends IBasePieSeriesSpec> extends PolarSeries<T> 
 
     this._specAngleField = this._angleField.slice();
     this._specRadiusField = [];
+
+    this._showEmptyCircle = this._spec.pie.showEmptyCircle ?? true;
   }
 
   initData() {
@@ -154,6 +160,8 @@ export class BasePieSeries<T extends IBasePieSeriesSpec> extends PolarSeries<T> 
     });
 
     this._viewDataLabel = new SeriesData(this._option, viewDataLabel);
+
+    this._emptyDataView = new DataView(new DataSet());
   }
 
   initMark(): void {
@@ -174,6 +182,16 @@ export class BasePieSeries<T extends IBasePieSeriesSpec> extends PolarSeries<T> 
         stateSort: this._spec.pie?.stateSort
       }
     ) as IArcMark;
+
+    this._emptyArcMark = this._createMark(
+      {
+        name: 'emptyMark',
+        type: 'arc'
+      },
+      {
+        dataView: this._emptyDataView
+      }
+    );
   }
 
   private startAngleScale(datum: Datum) {
@@ -209,6 +227,21 @@ export class BasePieSeries<T extends IBasePieSeriesSpec> extends PolarSeries<T> 
         AttributeLevel.Series
       );
     }
+
+    const emptyPieMark = this._emptyArcMark;
+    if (this.getRawData().latestData.length === 0 && this._showEmptyCircle) {
+      this.setMarkStyle(emptyPieMark, {
+        x: () => this.getCenter().x,
+        y: () => this.getCenter().y,
+        fill: this.getColorAttribute(),
+        innerRadius: () => this._computeLayoutRadius() * this._innerRadius,
+        outerRadius: () => this._computeLayoutRadius() * this._outerRadius + 1,
+        cornerRadius: () => this._computeLayoutRadius() * this._cornerRadius,
+        startAngle: 0,
+        endAngle: Math.PI * 2,
+        padAngle: this._padAngle
+      });
+    }
   }
 
   initInteraction(): void {
@@ -231,6 +264,9 @@ export class BasePieSeries<T extends IBasePieSeriesSpec> extends PolarSeries<T> 
           this.setMarkStyle(mark, this.generateRadiusStyle(pieSpec.state[state]), state, AttributeLevel.User_Mark);
         }
       }
+    }
+    if (this.getRawData().latestData.length === 0 && mark.name === 'emptyMark' && this._showEmptyCircle) {
+      super.initMarkStyleWithSpec(mark, { style: this._spec.pie.emptyCircleStyle }, key);
     }
   }
 

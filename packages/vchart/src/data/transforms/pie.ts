@@ -1,8 +1,8 @@
 import type { DataView } from '@visactor/vdataset';
 import type { Datum } from '../../typings';
-import { couldBeValidNumber } from '../../util/type';
-import { computeQuadrant, getPercentValue } from '../../util/math';
 import { ARC_TRANSFORM_VALUE } from '../../constant/polar';
+import { computeQuadrant, getPercentValue } from '../../util/math';
+import { couldBeValidNumber } from '../../util/type';
 
 export interface IPieOpt {
   angleField: string;

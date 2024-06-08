@@ -73,7 +73,16 @@ export interface IPieSeriesSpec extends IPolarSeriesSpec, IAnimationSpec<PieMark
   minAngle?: number;
 
   /** 扇区样式 */
-  [SeriesMarkNameEnum.pie]?: IMarkSpec<IArcMarkSpec>;
+  [SeriesMarkNameEnum.pie]?: IMarkSpec<IArcMarkSpec> & {
+    /**
+     * 是否显示空白区域
+     * @default true
+     */
+    showEmptyCircle?: boolean;
+
+    /** 空白区域样式 */
+    emptyCircleStyle?: IMarkSpec<IArcMarkSpec>;
+  };
   /** 标签配置 */
   [SeriesMarkNameEnum.label]?: IMultiLabelSpec<IArcLabelSpec>;
 }
