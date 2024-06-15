@@ -85,7 +85,7 @@ export interface IPieSeriesSpec extends IPolarSeriesSpec, IAnimationSpec<PieMark
     showEmptyCircle: boolean;
 
     /** 占位圆样式 */
-    emptyCircleStyle?: IMarkSpec<IArcMarkSpec>;
+    emptyCircle?: IMarkSpec<IArcMarkSpec>;
   };
 }
 
